@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -151,7 +151,7 @@
         <td th:text="${bus.inpark} ? 'Yes' : 'No'"></td>
         <td>
             <!-- Button to arrive bus -->
-            <button th:onclick="'arriveBus(' + ${bus.id} + ')'">Arrive</button>
+            <button th:onclick="'arriveBus('+${bus.id} +')'">Arrive</button>
         </td>
     </tr>
     </tbody>
@@ -177,79 +177,27 @@
     </div>
 </form>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.0/sockjs.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
 <script>
-    var socket = new SockJS('http://localhost:8082/ws');
-    var stompClient = Stomp.over(socket);
-
-    stompClient.connect({}, function(frame) {
-        console.log('Connected: ' + frame);
-        stompClient.subscribe('/topic/buses', function(busUpdate){
-            console.log('Received message:', busUpdate.body);
-            try {
-                var bus = JSON.parse(busUpdate.body);
-                updateBusTable(bus);
-            } catch (error) {
-                console.error('Error parsing JSON:', error, busUpdate.body);
-            }
-        });
-    });
-
-    function updateBusTable(bus) {
-        // Update the buses in park table
-        var parkedBusesTable = document.getElementById("parkedBuses");
-        // Clear the current table
-        parkedBusesTable.innerHTML = '';
-        bus.parkedBuses.forEach(function(bus) {
-            var row = parkedBusesTable.insertRow();
-            row.innerHTML = `
-                <td>${bus.id}</td>
-                <td>${bus.number}</td>
-                <td>${bus.driverName}</td>
-                <td>${bus.routeNumber}</td>
-                <td>${bus.inpark ? 'Yes' : 'No'}</td>
-                <td><button onclick="departBus(${bus.id})">Depart</button></td>
-            `;
-        });
-
-        // Update the buses on route table
-        var busesOnRouteTable = document.getElementById("busesOnRoute");
-        // Clear the current table
-        busesOnRouteTable.innerHTML = '';
-        bus.busesOnRoute.forEach(function(bus) {
-            var row = busesOnRouteTable.insertRow();
-            row.innerHTML = `
-                <td>${bus.id}</td>
-                <td>${bus.number}</td>
-                <td>${bus.driverName}</td>
-                <td>${bus.routeNumber}</td>
-                <td>${bus.inpark ? 'Yes' : 'No'}</td>
-                <td><button onclick="arriveBus(${bus.id})">Arrive</button></td>
-            `;
-        });
-    }
-
     function departBus(id) {
-        fetch(`http://localhost:8082/buses/departure/${id}`, { method: 'PUT' })
+        fetch(`http://localhost:8082//buses/departure/${id}`, {method: 'PUT'})
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Unable to depart bus');
                 }
-                // Notify users about the update
-                stompClient.send("http://localhost:8082/app/updateBuses", {}, JSON.stringify({ action: "depart", id: id }));
+                // Reload the page after successful departure
+                location.reload();
             })
             .catch(error => console.error('Error:', error));
     }
 
     function arriveBus(id) {
-        fetch(`http://localhost:8082/buses/arrival/${id}`, { method: 'PUT' })
+        fetch(`http://localhost:8082//buses/arrival/${id}`, {method: 'PUT'})
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Unable to arrive bus');
                 }
-                // Notify users about the update
-                stompClient.send("http://localhost:8082/app/updateBuses", {}, JSON.stringify({ action: "arrive", id: id }));
+                // Reload the page after successful arrival
+                location.reload();
             })
             .catch(error => console.error('Error:', error));
     }
@@ -261,7 +209,7 @@
             number: form.number.value,
             driverName: form.driverName.value,
             routeNumber: form.routeNumber.value,
-            inpark: true  // Новий автобус спочатку знаходиться в парку
+            inpark: true  // New bus initially in park
         };
 
         fetch('http://localhost:8082/buses', {
@@ -275,11 +223,8 @@
                 if (!response.ok) {
                     throw new Error('Unable to add bus');
                 }
-                return response.json();  // Додано для обробки відповіді сервера
-            })
-            .then(data => {
-                // Notify users about the  update
-                stompClient.send("http://localhost:8082/app/updateBuses", {}, JSON.stringify(data));
+                // Reload the page after successful addition
+                location.reload();
             })
             .catch(error => console.error('Error:', error));
     }
