@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -114,18 +114,7 @@
     </tr>
     </thead>
     <tbody id="parkedBuses">
-    <!-- Loop through each bus in park and display its information -->
-    <tr th:each="bus : ${parkedBuses}">
-        <td th:text="${bus.id}"></td>
-        <td th:text="${bus.number}"></td>
-        <td th:text="${bus.driverName}"></td>
-        <td th:text="${bus.routeNumber}"></td>
-        <td th:text="${bus.inpark} ? 'Yes' : 'No'"></td>
-        <td>
-            <!-- Button to depart bus -->
-            <button th:onclick="'departBus(' + ${bus.id} + ')'">Depart</button>
-        </td>
-    </tr>
+    <!-- Buses in park will be populated here -->
     </tbody>
 </table>
 
@@ -142,18 +131,7 @@
     </tr>
     </thead>
     <tbody id="busesOnRoute">
-    <!-- Loop through each bus on route and display its information -->
-    <tr th:each="bus : ${busesOnRoute}">
-        <td th:text="${bus.id}"></td>
-        <td th:text="${bus.number}"></td>
-        <td th:text="${bus.driverName}"></td>
-        <td th:text="${bus.routeNumber}"></td>
-        <td th:text="${bus.inpark} ? 'Yes' : 'No'"></td>
-        <td>
-            <!-- Button to arrive bus -->
-            <button th:onclick="'arriveBus('+${bus.id} +')'">Arrive</button>
-        </td>
-    </tr>
+    <!-- Buses on route will be populated here -->
     </tbody>
 </table>
 
@@ -178,20 +156,60 @@
 </form>
 
 <script>
+    document.addEventListener("DOMContentLoaded", () => {
+        fetch('http://localhost:8082/buses/parked')
+            .then(response => response.json())
+            .then(data => {console.log(data)
+                const parkedBusesTable = document.getElementById('parkedBuses');
+                data.forEach(bus => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${bus.id}</td>
+                        <td>${bus.number}</td>
+                        <td>${bus.driverName}</td>
+                        <td>${bus.routeNumber}</td>
+                        <td>${bus.inpark ? 'Yes' : 'No'}</td>
+                        <td><button onclick="departBus(${bus.id})">Depart</button></td>
+                    `;
+                    parkedBusesTable.appendChild(row);
+                });
+            })
+            .catch(error => console.error('Error fetching parked buses:', error));
+
+        fetch('http://localhost:8082/buses/onroute')
+            .then(response => response.json())
+            .then(data => {
+                const busesOnRouteTable = document.getElementById('busesOnRoute');
+                data.forEach(bus => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${bus.id}</td>
+                        <td>${bus.number}</td>
+                        <td>${bus.driverName}</td>
+                        <td>${bus.routeNumber}</td>
+                        <td>${bus.inpark ? 'Yes' : 'No'}</td>
+                        <td><button onclick="arriveBus(${bus.id})">Arrive</button></td>
+                    `;
+                    busesOnRouteTable.appendChild(row);
+                });
+            })
+            .catch(error => console.error('Error fetching buses on route:', error));
+    });
+
     function departBus(id) {
-        fetch(`http://localhost:8082//buses/departure/${id}`, {method: 'PUT'})
+        fetch(`http://localhost:8082/buses/departure/${id}`, { method: 'PUT' })
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Unable to depart bus');
                 }
-                // Reload the page after succeul departure
+                // Reload the page after successful departure
                 location.reload();
             })
             .catch(error => console.error('Error:', error));
     }
 
     function arriveBus(id) {
-        fetch(`http://localhost:8082//buses/arrival/${id}`, {method: 'PUT'})
+        fetch(`http://localhost:8082/buses/arrival/${id}`, { method: 'PUT' })
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Unable to arrive bus');
