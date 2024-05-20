@@ -278,7 +278,7 @@
                 return response.json();  // Додано для обробки відповіді сервера
             })
             .then(data => {
-                // Notify users about the update
+                // Notify users about the  update
                 stompClient.send("http://localhost:8082/app/updateBuses", {}, JSON.stringify(data));
             })
             .catch(error => console.error('Error:', error));
