@@ -180,7 +180,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.0/sockjs.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
 <script>
-    var socket = new SockJS('/ws');
+    var socket = new SockJS('http://localhost:8082/ws');
     var stompClient = Stomp.over(socket);
 
     stompClient.connect({}, function(frame) {
@@ -231,25 +231,25 @@
     }
 
     function departBus(id) {
-        fetch(`/buses/departure/${id}`, { method: 'PUT' })
+        fetch(`http://localhost:8082/buses/departure/${id}`, { method: 'PUT' })
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Unable to depart bus');
                 }
                 // Notify users about the update
-                stompClient.send("/app/updateBuses", {}, JSON.stringify({ action: "depart", id: id }));
+                stompClient.send("http://localhost:8082/app/updateBuses", {}, JSON.stringify({ action: "depart", id: id }));
             })
             .catch(error => console.error('Error:', error));
     }
 
     function arriveBus(id) {
-        fetch(`/buses/arrival/${id}`, { method: 'PUT' })
+        fetch(`http://localhost:8082/buses/arrival/${id}`, { method: 'PUT' })
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Unable to arrive bus');
                 }
                 // Notify users about the update
-                stompClient.send("/app/updateBuses", {}, JSON.stringify({ action: "arrive", id: id }));
+                stompClient.send("http://localhost:8082/app/updateBuses", {}, JSON.stringify({ action: "arrive", id: id }));
             })
             .catch(error => console.error('Error:', error));
     }
@@ -264,7 +264,7 @@
             inpark: true  // Новий автобус спочатку знаходиться в парку
         };
 
-        fetch('/buses', {
+        fetch('http://localhost:8082/buses', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -279,7 +279,7 @@
             })
             .then(data => {
                 // Notify users about the update
-                stompClient.send("/app/updateBuses", {}, JSON.stringify(data));
+                stompClient.send("http://localhost:8082/app/updateBuses", {}, JSON.stringify(data));
             })
             .catch(error => console.error('Error:', error));
     }
