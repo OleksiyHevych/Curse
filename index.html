@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Page</title>
+    <title>Сторінка Адміна</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -99,18 +99,17 @@
     </style>
 </head>
 <body>
-<h1>Information from Database</h1>
+<h1>Програма моделювання роботи автобусного парку.</h1>
 
-<h2>Buses in Park</h2>
+<h2>Автобуси в парку</h2>
 <table>
     <thead>
     <tr>
         <th>ID</th>
-        <th>Number</th>
-        <th>Driver Name</th>
-        <th>Route Number</th>
-        <th>In Park</th>
-        <th>Action</th>
+        <th>Номер автобуса</th>
+        <th>Прізвище та ініціали водія</th>
+        <th>Номер маршруту</th>
+        <th>Дії</th>
     </tr>
     </thead>
     <tbody id="parkedBuses">
@@ -123,11 +122,10 @@
     <thead>
     <tr>
         <th>ID</th>
-        <th>Number</th>
-        <th>Driver Name</th>
-        <th>Route Number</th>
-        <th>In Park</th>
-        <th>Action</th>
+        <th>Номер автобуса</th>
+        <th>Прізвище та ініціали водія</th>
+        <th>Номер маршруту</th>
+        <th>Дії</th>
     </tr>
     </thead>
     <tbody id="busesOnRoute">
@@ -136,22 +134,22 @@
 </table>
 
 <!-- Form to add a new bus -->
-<h2>Add a New Bus</h2>
+<h2>Додати новий автобус до парку</h2>
 <form id="addBusForm" onsubmit="return addBus(event)">
     <div class="form-group">
-        <label for="number">Number:</label>
+        <label for="number">Номер автобуса:</label>
         <input type="text" id="number" name="number" required>
     </div>
     <div class="form-group">
-        <label for="driverName">Driver Name:</label>
+        <label for="driverName">Прізвище та ініціали водія:</label>
         <input type="text" id="driverName" name="driverName" required>
     </div>
     <div class="form-group">
-        <label for="routeNumber">Route Number:</label>
+        <label for="routeNumber">Номер маршруту:</label>
         <input type="text" id="routeNumber" name="routeNumber" required>
     </div>
     <div class="form-group">
-        <button type="submit">Add Bus</button>
+        <button type="submit">Додати автобус</button>
     </div>
 </form>
 
@@ -168,7 +166,6 @@
                         <td>${bus.number}</td>
                         <td>${bus.driverName}</td>
                         <td>${bus.routeNumber}</td>
-                        <td>${bus.inpark ? 'Yes' : 'No'}</td>
                         <td><button onclick="departBus(${bus.id})">Depart</button></td>
                     `;
                     parkedBusesTable.appendChild(row);
@@ -187,7 +184,6 @@
                         <td>${bus.number}</td>
                         <td>${bus.driverName}</td>
                         <td>${bus.routeNumber}</td>
-                        <td>${bus.inpark ? 'Yes' : 'No'}</td>
                         <td><button onclick="arriveBus(${bus.id})">Arrive</button></td>
                     `;
                     busesOnRouteTable.appendChild(row);
