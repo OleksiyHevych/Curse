@@ -146,7 +146,7 @@
     </div>
     <div class="form-group">
         <label for="routeNumber">Номер маршруту:</label>
-        <input type="text" id="routeNumber" name="routeNumber" required>
+        <input type="text" id="routeNumber" name="routeNumber" pattern="\d{4}" title="Номер маршруту повинен бути чотиризначним числом" required>
     </div>
     <div class="form-group">
         <button type="submit">Додати автобус</button>
@@ -157,7 +157,7 @@
     document.addEventListener("DOMContentLoaded", () => {
         fetch('http://localhost:8082/buses/parked')
             .then(response => response.json())
-            .then(data => {console.log(data)
+            .then(data => {
                 const parkedBusesTable = document.getElementById('parkedBuses');
                 data.forEach(bus => {
                     const row = document.createElement('tr');
