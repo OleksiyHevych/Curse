@@ -101,20 +101,35 @@
 <body>
 <h1>Програма моделювання роботи автобусного парку.</h1>
 
-<h2>Список автобусів</h2>
+<h2>Автобуси в парку</h2>
 <table>
     <thead>
     <tr>
-        <th>ID</th>
+        <th>#</th>
         <th>Номер автобуса</th>
         <th>Прізвище та ініціали водія</th>
         <th>Номер маршруту</th>
-        <th>Статус</th>
         <th>Дії</th>
     </tr>
     </thead>
-    <tbody id="allBuses">
-    <!-- All buses will be populated here -->
+    <tbody id="parkedBuses">
+    <!-- Buses in park will be populated here -->
+    </tbody>
+</table>
+
+<h2>Автобуси у дорозі</h2>
+<table>
+    <thead>
+    <tr>
+        <th>#</th>
+        <th>Номер автобуса</th>
+        <th>Прізвище та ініціали водія</th>
+        <th>Номер маршруту</th>
+        <th>Дії</th>
+    </tr>
+    </thead>
+    <tbody id="busesOnRoute">
+    <!-- Buses on route will be populated here -->
     </tbody>
 </table>
 
@@ -140,75 +155,93 @@
 
 <script>
     document.addEventListener("DOMContentLoaded", () => {
-        fetch('http://localhost:8082/buses')
+        fetch('http://localhost:8082/buses/parked')
             .then(response => response.json())
             .then(data => {
-                const allBusesTable = document.getElementById('allBuses');
-                data.forEach(bus => {
+                const parkedBusesTable = document.getElementById('parkedBuses');
+                data.forEach((bus, index) => {
                     const row = document.createElement('tr');
                     row.innerHTML = `
-                        <td>${bus.id}</td>
+                        <td>${index + 1}</td>
                         <td>${bus.number}</td>
                         <td>${bus.driverName}</td>
                         <td>${bus.routeNumber}</td>
-                        <td>${bus.inPark ? 'В парку' : 'У дорозі'}</td>
-                        <td>
-                            ${bus.inPark ? `<button onclick="departBus(${bus.id})">Відправити</button>` : `<button onclick="arriveBus(${bus.id})">Прибути</button>`}
-                        </td>
+                        <td><button onclick="departBus(${bus.id})">Depart</button></td>
                     `;
-                    allBusesTable.appendChild(row);
+                    parkedBusesTable.appendChild(row);
                 });
             })
-            .catch(error => console.error('Error fetching buses:', error));
+            .catch(error => console.error('Error fetching parked buses:', error));
+
+        fetch('http://localhost:8082/buses/onroute')
+            .then(response => response.json())
+            .then(data => {
+                const busesOnRouteTable = document.getElementById('busesOnRoute');
+                data.forEach((bus, index) => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${index + 1}</td>
+                        <td>${bus.number}</td>
+                        <td>${bus.driverName}</td>
+                        <td>${bus.routeNumber}</td>
+                        <td><button onclick="arriveBus(${bus.id})">Arrive</button></td>
+                    `;
+                    busesOnRouteTable.appendChild(row);
+                });
+            })
+            .catch(error => console.error('Error fetching buses on route:', error));
     });
 
     function departBus(id) {
         fetch(`http://localhost:8082/buses/departure/${id}`, { method: 'PUT' })
-            .then(response => {
-                if (!response.ok) {
+                    .then(response => {
+                    if (!response.ok) {
                     throw new Error('Unable to depart bus');
-                }
-                location.reload();
-            })
-            .catch(error => console.error('Error:', error));
-    }
+                    }
+                        // Reload the page after successful departure
+                    location.reload();
+                    })
+                    .catch(error => console.error('Error:', error));
+                    }
 
-    function arriveBus(id) {
-        fetch(`http://localhost:8082/buses/arrival/${id}`, { method: 'PUT' })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Unable to arrive bus');
+                function arriveBus(id) {
+                    fetch(`http://localhost:8082/buses/arrival/${id}`, { method: 'PUT' })
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error('Unable to arrive bus');
+                            }
+                            // Reload the page after successful arrival
+                            location.reload();
+                        })
+                        .catch(error => console.error('Error:', error));
                 }
-                location.reload();
-            })
-            .catch(error => console.error('Error:', error));
-    }
 
-    function addBus(event) {
-        event.preventDefault();
-        const form = document.getElementById('addBusForm');
-        const data = {
-            number: form.number.value,
-            driverName: form.driverName.value,
-            routeNumber: form.routeNumber.value,
-            inPark: true  // New bus initially in park
-        };
+                function addBus(event) {
+                    event.preventDefault();
+                    const form = document.getElementById('addBusForm');
+                    const data = {
+                        number: form.number.value,
+                        driverName: form.driverName.value,
+                        routeNumber: form.routeNumber.value,
+                        inpark: true  // New bus initially in park
+                    };
 
-        fetch('http://localhost:8082/buses', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data)
-        })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Unable to add bus');
+                    fetch('http://localhost:8082/buses', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(data)
+                    })
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error('Unable to add bus');
+                            }
+                            // Reload the page after successful addition
+                            location.reload();
+                        })
+                        .catch(error => console.error('Error:', error));
                 }
-                location.reload();
-            })
-            .catch(error => console.error('Error:', error));
-    }
 </script>
 </body>
 </html>
