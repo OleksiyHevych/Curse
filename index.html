@@ -9,12 +9,13 @@
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f8f9fa;
+            background: linear-gradient(to right, #6a11cb, #2575fc);
+            color: #ffffff;
         }
 
         h1, h2 {
             text-align: center;
-            color: #343a40;
+            color: #ffffff;
             margin: 5px 0;
         }
 
@@ -23,6 +24,7 @@
             margin: 5px auto;
             border-collapse: collapse;
             background-color: #ffffff;
+            color: #343a40;
             box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
         }
 
@@ -66,6 +68,7 @@
             margin: 10px auto;
             padding: 10px;
             background-color: #ffffff;
+            color: #343a40;
             box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
             border-radius: 5px;
         }
@@ -138,11 +141,11 @@
 <form id="addBusForm" onsubmit="return addBus(event)">
     <div class="form-group">
         <label for="number">Номер автобуса:</label>
-        <input type="text" id="number" name="number" pattern="^[A-Z]{2}\d{4}[A-Z]{2}$" title="Номер автобуса повинен бути у форматі: AA1111EK" required>
+        <input type="text" id="number" name="number" pattern="[А-ЯІЇЄ]{2}\d{4}[А-ЯІЇЄ]{2}" title="Номер автобуса повинен бути у форматі AA1111BB" required>
     </div>
     <div class="form-group">
         <label for="driverName">Прізвище та ініціали водія:</label>
-        <input type="text" id="driverName" name="driverName" pattern="^[А-ЯІЇЄҐ][а-яіїєґ]+\s[А-ЯІЇЄҐ]\.[А-ЯІЇЄҐ]\.$" title="Прізвище та ініціали повинні бути у форматі: Прізвище І.Б." required>
+        <input type="text" id="driverName" name="driverName" pattern="[А-ЯІЇЄа-яіїє]+ [А-ЯІЇЄ]\.[А-ЯІЇЄ]\." title="Прізвище та ініціали повинні бути у форматі Прізвище І.Б." required>
     </div>
     <div class="form-group">
         <label for="routeNumber">Номер маршруту:</label>
@@ -223,7 +226,7 @@
             number: form.number.value,
             driverName: form.driverName.value,
             routeNumber: form.routeNumber.value,
-            inpark: true
+            inpark: true  // New bus initially in park
         };
 
         fetch('http://localhost:8082/buses', {
