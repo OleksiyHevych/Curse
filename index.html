@@ -142,7 +142,7 @@
     </div>
     <div class="form-group">
         <label for="driverName">Прізвище та ініціали водія:</label>
-        <input type="text" id="driverName" name="driverName" required>
+        <input type="text" id="driverName" name="driverName" pattern="^[А-ЯІЇЄҐ][а-яіїєґ]+\s[А-ЯІЇЄҐ]\.[А-ЯІЇЄҐ]\.$" title="Прізвище та ініціали повинні бути у форматі: Прізвище І.Б." required>
     </div>
     <div class="form-group">
         <label for="routeNumber">Номер маршруту:</label>
@@ -194,54 +194,54 @@
 
     function departBus(id) {
         fetch(`http://localhost:8082/buses/departure/${id}`, { method: 'PUT' })
-                    .then(response => {
-                    if (!response.ok) {
+            .then(response => {
+                if (!response.ok) {
                     throw new Error('Unable to depart bus');
-                    }
-                        // Reload the page after successful departure
-                    location.reload();
-                    })
-                    .catch(error => console.error('Error:', error));
-                    }
-
-                function arriveBus(id) {
-                    fetch(`http://localhost:8082/buses/arrival/${id}`, { method: 'PUT' })
-                        .then(response => {
-                            if (!response.ok) {
-                                throw new Error('Unable to arrive bus');
-                            }
-                            // Reload the page after successful arrival
-                            location.reload();
-                        })
-                        .catch(error => console.error('Error:', error));
                 }
+                // Reload the page after successful departure
+                location.reload();
+            })
+            .catch(error => console.error('Error:', error));
+    }
 
-                function addBus(event) {
-                    event.preventDefault();
-                    const form = document.getElementById('addBusForm');
-                    const data = {
-                        number: form.number.value,
-                        driverName: form.driverName.value,
-                        routeNumber: form.routeNumber.value,
-                        inpark: true  // New bus initially in park
-                    };
-
-                    fetch('http://localhost:8082/buses', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify(data)
-                    })
-                        .then(response => {
-                            if (!response.ok) {
-                                throw new Error('Unable to add bus');
-                            }
-                            // Reload the page after successful addition
-                            location.reload();
-                        })
-                        .catch(error => console.error('Error:', error));
+    function arriveBus(id) {
+        fetch(`http://localhost:8082/buses/arrival/${id}`, { method: 'PUT' })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Unable to arrive bus');
                 }
+                // Reload the page after successful arrival
+                location.reload();
+            })
+            .catch(error => console.error('Error:', error));
+    }
+
+    function addBus(event) {
+        event.preventDefault();
+        const form = document.getElementById('addBusForm');
+        const data = {
+            number: form.number.value,
+            driverName: form.driverName.value,
+            routeNumber: form.routeNumber.value,
+            inpark: true  // New bus initially in park
+        };
+
+        fetch('http://localhost:8082/buses', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Unable to add bus');
+                }
+                // Reload the page after successful addition
+                location.reload();
+            })
+            .catch(error => console.error('Error:', error));
+    }
 </script>
 </body>
 </html>
