@@ -6,6 +6,7 @@
     <title>Сторінка Адміна</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Comic+Sans+MS&display=swap" rel="stylesheet">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -55,11 +56,12 @@
             margin: 2px;
             background-color: #007bff;
             color: white;
-            border: none;
+            border: 1px solid #99ED45; /* Зміна кольору рамки */
             border-radius: 3px;
             cursor: pointer;
             transition: background-color 0.3s ease;
             font-size: 0.9em;
+            font-family: 'Comic Sans MS', cursive; /* Встановлення шрифту Comic Sans */
         }
 
         button:hover {
@@ -74,6 +76,7 @@
             color: #343a40;
             box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
             border-radius: 5px;
+            font-family: 'Comic Sans MS', cursive; /* Встановлення шрифту Comic Sans */
         }
 
         input, label {
@@ -81,11 +84,12 @@
             width: calc(100% - 20px);
             margin: 5px auto;
             font-size: 0.9em;
+            font-weight: 500; /* Зміна жирності шрифту */
         }
 
         input {
             padding: 5px;
-            border: 1px solid #ced4da;
+            border: 1px solid #99ED45; /* Зміна кольору рамки */
             border-radius: 3px;
             transition: border-color 0.3s ease;
         }
@@ -137,8 +141,8 @@
     <tbody id="busesOnRoute">
     <!-- Buses on route will be populated here -->
     </tbody>
-</table>
 
+</table>
 <!-- Form to add a new bus -->
 <h2>Додати новий автобус до парку</h2>
 <form id="addBusForm" onsubmit="return addBus(event)">
@@ -161,7 +165,6 @@
         <button type="submit">Додати автобус</button>
     </div>
 </form>
-
 <script>
     document.addEventListener("DOMContentLoaded", () => {
         fetch('http://localhost:8082/buses/parked')
