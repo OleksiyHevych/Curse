@@ -14,8 +14,8 @@
             padding: 0;
             background: linear-gradient(to bottom, #de9914, #19e80d);
             background-size: 400% 400%;
-            animation: gradientAnimation 10s ease infinite;
-            color: #ffffff;
+            animation: gradientAnimation 15s ease infinite;
+            color: #343a40;
         }
 
         @keyframes gradientAnimation {
@@ -26,7 +26,7 @@
 
         h1, h2 {
             text-align: center;
-            color: #ffffff;
+            color: #343a40;
             margin: 5px 0;
             font-family: 'Montserrat', sans-serif;
         }
@@ -35,7 +35,7 @@
             width: 95%;
             margin: 5px auto;
             border-collapse: collapse;
-            background-color: #c8d6e5; /* Замініть на свій вибраний колір */
+            background-color: #c8d6e5;
             color: #343a40;
             box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
         }
@@ -48,11 +48,14 @@
             padding: 5px;
             text-align: left;
             font-size: 0.9em;
+            font-family: 'Comic Sans MS', cursive;
+            font-palette: dark;
         }
 
         th {
-            background-color: #007bff;
-            color: white;
+            color: #343a40;
+            background-color: #30ffec;
+            font-palette: dark;
         }
 
         tr:nth-child(even) {
@@ -63,13 +66,13 @@
             padding: 5px;
             margin: 2px;
             background-color: #007bff;
-            color: white;
-            border: 1px solid #99ED45; /* Зміна кольору рамки */
+            font-size: 1em;
+            color: #343a40;
+            border: 1px solid #99ED45;
             border-radius: 3px;
             cursor: pointer;
             transition: background-color 0.3s ease;
-            font-size: 0.9em;
-            font-family: 'Comic Sans MS', cursive; /* Встановлення шрифту Comic Sans */
+            font-family: 'Comic Sans MS', cursive;
         }
 
         button:hover {
@@ -80,11 +83,11 @@
             width: 95%;
             margin: 10px auto;
             padding: 10px;
-            background-color: #ffffff;
+            background-color: #30ffec;
             color: #343a40;
             box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
             border-radius: 5px;
-            font-family: 'Comic Sans MS', cursive; /* Встановлення шрифту Comic Sans */
+            font-family: 'Comic Sans MS', cursive;
         }
 
         input, label {
@@ -92,12 +95,12 @@
             width: calc(100% - 20px);
             margin: 5px auto;
             font-size: 0.9em;
-            font-weight: 500;
+            font-weight: bold;
         }
 
         input {
             padding: 5px;
-            border: 1px solid #99ED45; /* Зміна кольору рамки */
+            border: 1px solid #99ED45;
             border-radius: 3px;
             transition: border-color 0.3s ease;
         }
